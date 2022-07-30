@@ -39,7 +39,7 @@ router.post('/login', async (req, res) => {
             const token = jwt.sign({username}, 'ccken');
             // 把token设置到cookie
             res.setHeader('Set-Cookie', [`${username}=${token}`]);
-            res.send({msg: 'Cookie set success!'});
+            res.send({msg: 'Cookie set success!', token});
         }
     }
 })
@@ -49,7 +49,6 @@ router.post('/login', async (req, res) => {
 router.post('/auth', async (req, res) => {
     // 获取token，token是在请求头里面的
     const token =  String(req.headers.authorization).split(' ').pop();
-    console.log(token);
     // 如果没有token说明前面没有登录过或者是登录已经失效
     if (!token) return res.send({msg: '请登录！'})
     // 根据密钥和字段解析token
@@ -60,7 +59,7 @@ router.post('/auth', async (req, res) => {
     if (!model) {
         return res.send({msg: '请注册！'});
     } else {
-        res.send({msg: '权限校验成功！'})
+        res.send({msg: '权限校验成功！', username});
     }
 })
 
